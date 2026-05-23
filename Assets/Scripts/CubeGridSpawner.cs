@@ -10,6 +10,10 @@ public class CubeGridSpawner : MonoBehaviour
     [Header("Target Prefab")]
     public GameObject targetPrefab;
 
+    [Header("Roof Pad")]
+    public bool spawnRoofPad = true;
+    public float roofPadYOffset = 8f;
+
     [Header("Room Scale")]
     public float roomScale = 425f;
 
@@ -36,6 +40,13 @@ public class CubeGridSpawner : MonoBehaviour
     public Camera cameraToMove;
     public Vector3 cameraTargetOffset = new Vector3(0f, 8f, -8f);
     public bool moveCameraToTarget = true;
+
+    [Header("Pad Light")]
+    public bool spawnPadLight = true;
+    public float padLightHeight = .3f;
+    public float padLightRange = 12f;
+    public float padLightIntensity = 1.5f;
+    public Color padLightColor = new Color(1f, 0.95f, 0.8f);
 
     public RoomController[,] grid;
 
@@ -130,12 +141,56 @@ public class CubeGridSpawner : MonoBehaviour
         }
 
         target.transform.localScale = new Vector3(2f, 0.02f, 2f);
+
+        SpawnRoofPad(target);
+        SpawnPadLight(newCube, target);
+
         target.SetActive(false);
 
         room.target = target;
         target.transform.SetParent(null);
 
         return room;
+    }
+
+    void SpawnRoofPad(GameObject floorPad)
+    {
+        if (!spawnRoofPad || floorPad == null)
+            return;
+
+        GameObject roofPad = Instantiate(
+            targetPrefab,
+            floorPad.transform.position + Vector3.up * roofPadYOffset,
+            floorPad.transform.rotation
+        );
+
+        roofPad.name = "Roof Pad";
+        roofPad.tag = "Untagged";
+        roofPad.transform.localScale = floorPad.transform.localScale;
+        roofPad.transform.SetParent(floorPad.transform, true);
+        roofPad.transform.position= new Vector3(roofPad.transform.position.x, roofPad.transform.position.y+1.48f, roofPad.transform.position.z);
+        foreach (Collider collider in roofPad.GetComponentsInChildren<Collider>())
+            collider.enabled = false;
+
+        foreach (CureTargetTrigger trigger in roofPad.GetComponentsInChildren<CureTargetTrigger>())
+            trigger.enabled = false;
+    }
+
+    void SpawnPadLight(GameObject roomObject, GameObject target)
+    {
+        if (!spawnPadLight || target == null)
+            return;
+
+        GameObject lightObject = new GameObject("Pad Light");
+        lightObject.transform.position = target.transform.position + Vector3.up * padLightHeight;
+        lightObject.transform.SetParent(roomObject.transform, true);
+
+        Light padLight = lightObject.AddComponent<Light>();
+        padLight.type = LightType.Point;
+        padLight.range = padLightRange;
+        padLight.intensity = padLightIntensity;
+        padLight.color = padLightColor;
+        padLight.shadows = LightShadows.None;
     }
 
     public void HideAllTargets()
@@ -238,9 +293,7 @@ public class CubeGridSpawner : MonoBehaviour
                 RoomController room = grid[row, col];
 
                 if (room != null && room.target != null && room.target.activeSelf)
-                {
                     return room;
-                }
             }
         }
 

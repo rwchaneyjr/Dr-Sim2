@@ -147,7 +147,7 @@ public class PlayerMove : MonoBehaviour
             doctorPos,
             Quaternion.LookRotation(playerCamera.transform.position - doctorPos)
         );
-        spawnedDoctor.transform.position=new Vector3(spawnedDoctor.transform.position.x, transform.position.y-1.15f, spawnedDoctor.transform.position.z);
+        spawnedDoctor.transform.position=new Vector3(spawnedDoctor.transform.position.x, transform.position.y-.9f, spawnedDoctor.transform.position.z);
         if (nursePrefab != null)
         {
             Vector3 nursePos = doctorPos + new Vector3(1.5f, 0f, 0f);

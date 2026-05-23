@@ -181,8 +181,8 @@ public class DoctorTool : MonoBehaviour
         if (healthMenuPanel != null)
             healthMenuPanel.SetActive(true);
 
-        if (secondOpinionMenuPanel != null)
-            secondOpinionMenuPanel.SetActive(true);
+      //  if (secondOpinionMenuPanel != null)
+        //    secondOpinionMenuPanel.SetActive(true);
 
         if (healthText != null)
             healthText.gameObject.SetActive(true);
