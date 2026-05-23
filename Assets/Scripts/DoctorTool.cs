@@ -155,6 +155,19 @@ public class DoctorTool : MonoBehaviour
             diagnosisText.gameObject.SetActive(true);
             diagnosisText.text = "Diagnosis:\n" + selectedPatient.currentCondition + "\nPress Space key for\ncure options";
         }
+
+        yield return new WaitForSeconds(3f);
+
+        HideDiagnosisUI();
+        diagnosisCoroutine = null;
+    }
+    void HideDiagnosisUI()
+    {
+        if (diagnosisPanel != null)
+            diagnosisPanel.SetActive(false);
+
+        if (diagnosisText != null)
+            diagnosisText.gameObject.SetActive(false);
     }
 
     void Update()

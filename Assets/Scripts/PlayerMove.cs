@@ -19,7 +19,7 @@ public class PlayerMove : MonoBehaviour
     public float moveSpeed = 2f;
     public float turnSpeed = 8f;
     public float stoppingDistance = 1f;
-
+    public Camera playerCamera;
     [Header("UI")]
     public GameObject healthMenu;
 
@@ -145,7 +145,7 @@ public class PlayerMove : MonoBehaviour
         spawnedDoctor = Instantiate(
             doctorPrefab,
             doctorPos,
-            Quaternion.LookRotation(transform.position - doctorPos)
+            Quaternion.LookRotation(playerCamera.transform.position - doctorPos)
         );
         spawnedDoctor.transform.position=new Vector3(spawnedDoctor.transform.position.x, transform.position.y-1.15f, spawnedDoctor.transform.position.z);
         if (nursePrefab != null)
